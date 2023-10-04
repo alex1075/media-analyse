@@ -1,6 +1,12 @@
 # media-anlyse
+### Install
 
-To run program 
+Make sure all dependancies are installed 
+'''bash
+pip install opencv-python numpy tqdm threading subprocess inquirer pillow shutil
 '''
-$ python main.py
+
+### To run program 
+'''bash
+python main.py
 '''
