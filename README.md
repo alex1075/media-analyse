@@ -2,11 +2,11 @@
 ### Install
 
 Make sure all dependancies are installed 
-''' bash
+``` bash
 pip install opencv-python numpy tqdm threading subprocess inquirer pillow shutil
-'''
+```
 
 ### To run program 
-''' bash
+``` bash
 python main.py
-'''
+```
