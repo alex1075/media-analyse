@@ -1,13 +1,13 @@
 # media-anlyse
-### Install
+# Install
 
-# Do not install manually unless you are debugging or contributing!
+## Do not install manually unless you are debugging or contributing!
 
 ## Recommeded Install 
-''' bash
+`````` bash
 docker build -t media-analyse .
 docker run -it -v /path/to/images:/media media-analyse
-'''
+```
 
 ## Debug install
 
