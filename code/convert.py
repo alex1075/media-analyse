@@ -1,7 +1,6 @@
 import cv2
 import glob, os
 from PIL import Image
-from imutils import paths
 from code.helper.utils import *
 from code.helper.imageTools import *
 import shutil

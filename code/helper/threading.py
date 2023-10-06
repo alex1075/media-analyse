@@ -1,6 +1,5 @@
 import os
 import time 
-import shutil
 import threading
 from code.convert import *
 from code.helper.utils import *

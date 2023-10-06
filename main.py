@@ -1,4 +1,5 @@
-import os
+#! /bin/python
+import os, sys
 import time
 import inquirer
 from code.convert import *
@@ -80,5 +81,6 @@ def main():
 
 
 if __name__ == '__main__':
+    os.system('export TERM=xterm-256color')
     main()
 

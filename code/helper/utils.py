@@ -3,6 +3,7 @@ import os
 import subprocess
 import inquirer
 import platform
+from PIL import Image
 
 host_file = os.getcwd() + '/code/data/hosts'
 
@@ -137,3 +138,8 @@ def cat_file(file):
 
 def parent_dir(path):
     return os.path.abspath(os.path.join(path, os.pardir)) + '/'
+
+def copy_exif(source_img, dest_img):
+    image = Image.open(image)
+    exif = image.info['exif']
+    image.save(dest_img, exif=exif)
