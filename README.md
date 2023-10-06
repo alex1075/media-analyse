@@ -1,6 +1,13 @@
 # media-anlyse
 ### Install
 
+# Do not install manually unless you are debugging or contributing!
+
+''' bash
+docker build -t media-analyse .
+docker run -it -v /path/to/images:/media media-analyse
+'''
+
 Make sure all dependancies are installed 
 ``` bash
 pip install opencv-python numpy tqdm threading subprocess inquirer pillow shutil
