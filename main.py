@@ -11,8 +11,8 @@ from code.helper.threading import *
 from code.helper.exif_data import *
 
 def main():
-    path = 'test_folder/' # debug only
-    # path = '/media' # production
+    # path = 'test_folder/' # debug only
+    path = '/media/' # production
     # display_banner()
     # selection_program()
     # os_check()
@@ -30,16 +30,16 @@ def main():
         # data_processing_banner()
         print('Converting multimedia data to JPEG images')
         fps = choose_framerate()
-        path = check_full_path(path)
         for file in os.listdir(path):
                 # print(file)
                 if file.endswith('.mp4') or file.endswith('.MP4'):
                     # print(file)
                     print('Converting video to image series (saved to subfolder)')
-                    convertAVideoToImage(file, path, fps)
+                    path2 = convertAVideoToImage(file, path, fps)
                     print('Video converted')
                     Exif_origin = choose_meta(path)
                     print('Copying metadata')
+                    iterate_meta_copy(path2, Exif_origin)
                     # end_program()
                 elif file.endswith('.jpg') or file.endswith('.png') or file.endswith('.tiff') or file.endswith('.bmp'):
                         convert(path, False)
