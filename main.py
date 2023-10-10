@@ -10,23 +10,17 @@ from code.helper.fancy import *
 from code.helper.threading import *
 from code.helper.exif_data import *
 
-path = '/media'
 
-def end_program():
-    a = input('Do you have something else to do? (y/n)')
-    if a == 'y':
-        main()
-    elif a == 'n':
-        print('Exiting')
-        banner_goodbye()
-        clear()
-        exit()
+
+
 
 def main():
-    display_banner()
-    selection_program()
-    os_check()
-    time.sleep(5)
+    path = 'test_folder' # debug only
+    # path = '/media' # production
+    # display_banner()
+    # selection_program()
+    # os_check()
+    # time.sleep(5)
     clear()
     question = [inquirer.List('selection',
                            message=" Main machine interface, what do you wish to do?",
@@ -37,22 +31,25 @@ def main():
     a = answer['selection']
     if a == 'Convert multimedia data to JPEG images':
         clear()
-        data_processing_banner()
+        # data_processing_banner()
         print('Converting multimedia data to JPEG images')
         path = check_full_path(path)
-        temp = input('Use temporary folder folder? (y/n)')
         for file in os.listdir(path):
+                # print(file)
                 if file.endswith('.mp4') or file.endswith('.MP4'):
+                    # print(file)
                     print('Converting video to image series (saved to subfolder)')
                     convertVideoToImage(path)
                     print('Video converted')
                     Exif_origin = choose_meta(path)
                     print('Copying metadata')
-                    end_program()
+                    # end_program()
                 elif file.endswith('.jpg') or file.endswith('.png') or file.endswith('.tiff') or file.endswith('.bmp'):
                         convert(path, False)
                         print('Images converted')
-                        end_program()
+                        # end_program()
+                elif file.endswith('.ARW') or file.endswith('.arw'):
+                     pass
                 else:
                     print('File type not supported')
     elif a == 'Beta test a function':

@@ -10,6 +10,11 @@ class bcolors:
     ERROR = '\033[91m'
     GOOD = '\033[92m'
 
+def end_program():
+    banner_goodbye()
+    clear()
+    exit()    
+
 def clear():
     # for windows
     if name == 'nt':

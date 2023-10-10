@@ -32,8 +32,9 @@ def resizeAllJpg(path_to_folder='Data/', newhight=1080, newwid=1080):
 def convertVideoToImage(path_to_folder='Video/', frame_rate=1):
     for fi in os.listdir(path_to_folder):
         nam, ext = os.path.splitext(fi)
-        if fi.endswith('.mp4'):
-            out = os.system('mkdir ' + path_to_folder + ' ' + nam)
+        if fi.endswith('.mp4') or fi.endswith('.MP4'):
+            out = path_to_folder + '/' + nam
+            print(out)
             cam = cv2.VideoCapture(path_to_folder + fi)
             all_frames = int(cam.get(cv2.CAP_PROP_FRAME_COUNT)) 
             try:
@@ -64,8 +65,12 @@ def convertVideoToImage(path_to_folder='Video/', frame_rate=1):
         else:
             pass
 
-def convertAVideoToImage(video):
-            cam = cv2.VideoCapture(video)
+def convertAVideoToImage(video, path, frame_rate=1):
+            try:
+                os.system('mkdir ' + path + '/' +video[:-4])
+            except:
+                pass
+            cam = cv2.VideoCapture(path + video)
             all_frames = int(cam.get(cv2.CAP_PROP_FRAME_COUNT)) 
             currentframe = 0
             with tqdm.tqdm(total=all_frames) as pbar:
@@ -73,10 +78,10 @@ def convertAVideoToImage(video):
                 while(True):
                     ret,frame = cam.read()
                     if ret:
-                        ni = name.split('/')
-                        name = video[:-4] + '/' + ni[-1] + '_frame_' + str(currentframe) + '.jpg'
-                        # print(name)
-                        cv2.imwrite(name, frame)
+                        ni = video.split('/')
+                        out = video[:-4] + '/' + ni[-1] + '_frame_' + str(currentframe) + '.jpg'
+                        if currentframe % frame_rate == 0:
+                            cv2.imwrite(out, frame)
                         currentframe += 1
                         pbar.update(1)
                     else:
