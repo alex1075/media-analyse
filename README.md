@@ -1,4 +1,4 @@
-# media-anlyse
+# media-analyse
 # Install
 
 ## Do not install manually unless you are debugging or contributing!
