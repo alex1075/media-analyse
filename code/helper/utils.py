@@ -25,26 +25,6 @@ def check_full_path(path):
         else:
             raise Exception('Path not found')
 
-def save_new_host():
-    host = input('Enter hostname or IP: ')
-    user = input('Enter username: ')
-    with open(check_full_path(host_file), 'a') as f:
-        f.write(host + ' ' + user + '\n')
-
-def choose_host():
-    hosts = []
-    with open(check_full_path(host_file), 'r') as f:
-        for line in f:
-            hosts.append(line.strip())
-    hosts.append('Add new host')        
-    questions = [inquirer.List('host', message='Choose host', choices=hosts)]
-    answers = inquirer.prompt(questions)
-    if answers['host'] == 'Add new host':
-        save_new_host()
-        return choose_host()
-    else:
-        return answers['host']
-
 #Grabs biggest dimension and scales the photo so that max dim is now 1280
 def resizeTo(image, newhigh=1280, newwid=1280, inter=cv2.INTER_AREA):
     (height, width) = image.shape[:2]
@@ -63,83 +43,21 @@ def resizeTo(image, newhigh=1280, newwid=1280, inter=cv2.INTER_AREA):
     else: 
         pass
 
-def remove_empty_lines(filename):
-    if not os.path.isfile(filename):
-        return
-    with open(filename) as filehandle:
-        lines = filehandle.readlines()
-    with open(filename, 'w') as filehandle:
-        lines = filter(lambda x: x.strip(), lines)
-        filehandle.writelines(lines) 
-
-def get_file_remote(name, ssh):
-    array = []
-    name = '*'+name+'*'    
-    proc = subprocess.run(["ssh", ssh, "-t", "find" , "/", "-name", name, '-print', ' 2>/dev/null'], stdout=subprocess.PIPE)
-    out = str(proc.stdout.decode('utf-8'))
-    out = out.split('\n')
-    for line in out:
-        li = line.strip('\r')
-        if ': Permission denied' in str(li):
-            pass
-        elif 'Connection to' in str(li):
-            pass
-        else:
-            if len(li) != 0:
-                array.append(li)
-            else:
-                pass    
-    return array
-
-def get_file_local(name):
-    array = []
-    name = '*'+name+'*'
-    proc = subprocess.run(["find" , "/", "-name", name, '-print', ' 2>/dev/null'], stdout=subprocess.PIPE)
-    out = str(proc.stdout.decode('utf-8'))
-    out = out.split('\n')
-    for line in out:
-        li = line.strip('\r')
-        if ': Permission denied' in str(li):
-            pass
-        elif 'Connection to' in str(li):
-            pass
-        else:
-            if len(li) != 0:
-                array.append(li)
-            else:
-                pass    
-    return array
-
-def get_file_over(dest, name):
-    loc = input('Local or Remote? (l/r): ')
-    if loc == 'l':
-        local = True
-        array = get_file_local(name)
-    elif loc == 'r':
-        local = False
-        host = choose_host()
-        array = get_file_remote(name, host)
-    if os.path.exists(dest) == False:
-        os.mkdir(dest)
-    dest = check_full_path(dest)
-    question = [inquirer.List('file',
-                           message="Which file do you want to copy?",
-                           choices=array,
-                       ),]
-    answer = inquirer.prompt(question)
-    print(answer['file'])
-    if local == True:
-        os.system('cp ' + answer['file'] + ' ' + dest)
-    elif local == False:
-        os.system('scp ' + host + ':' + answer['file'] + ' ' + dest)
-
 def cat_file(file):
     os.system('cat ' + file)
 
 def parent_dir(path):
     return os.path.abspath(os.path.join(path, os.pardir)) + '/'
 
-def copy_exif(source_img, dest_img):
-    image = Image.open(image)
-    exif = image.info['exif']
-    image.save(dest_img, exif=exif)
+def choose_meta(path):
+    array = []
+    path = check_full_path(path)
+    for d in os.listdir(path):
+        if d.endswith('.ARW') == True or d.endswith('.jpg') or d.endswith('.JPG') or d.endswith('.png') or d.endswith('.PNG') or d.endswith('.tiff') or d.endswith('.TIFF') or d.endswith('.bmp') or d.endswith('.BMP'):
+            array.append(path + d)
+    question = [inquirer.List('image',
+                            message="Which image do you want to copy the exif data from?",
+                            choices=array,
+                        ),]
+    answer = inquirer.prompt(question)
+    return answer['image']   

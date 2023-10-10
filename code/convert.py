@@ -7,40 +7,16 @@ import shutil
 import tqdm
 
 
-def convert(path_to_folder='Data/', save_to_new=False, save_path='temp/'):
+def convert(path_to_folder='Data/', save_path='jpegs/'):
+    save_path = check_full_path(save_path)
     for infile in tqdm.tqdm(os.listdir(path_to_folder), desc='Converting images', unit='images'):
-        if infile[-3:] == "bmp":
+        if infile[-3:] == "bmp" or infile[-3:] == "BMP" or infile[-3:] == "tif" or infile[-3:] == "TIF" or infile[-3:] == "raw" or infile[-3:] == "RAW" or infile[-3:] == "dng" or infile[-3:] == "DNG" or infile[-4:] == "tiff" or infile[-4:] == "TIFF" or infile[-3:] == 'ARW' or infile[-3:] == 'arw':
             outfile = infile[:-3] + "jpg"
-            im = Image.open(path_to_folder + infile)
-            out = im.convert("RGB")
-            if save_to_new == True:
-                out.save(save_path + outfile, "jpeg", quality=100)
-            else:
-                out.save(path_to_folder + outfile, "jpeg", quality=100)
-            os.remove(path_to_folder + infile)
-        elif infile[-4:] == "tiff":
-            outfile = infile[:-4] + "jpg"
-            im = Image.open(path_to_folder + infile)
-            out = im.convert("RGB")
-            if save_to_new == True:
-                out.save(save_path + outfile, "jpeg", quality=100)
-            else:
-                out.save(path_to_folder + outfile, "jpeg", quality=100)
-            os.remove(path_to_folder + infile)
-        elif infile[-3:] == "png":
-            outfile = infile[:-3] + "jpg"
-            img = cv2.imread(path_to_folder + infile)
-            if save_to_new == True:
-                cv2.imwrite(save_path + outfile, img)
-            else:
-                cv2.imwrite(path_to_folder + outfile, img)
+            os.system('iconvert' + ' ' + path_to_folder + infile + ' ' + save_path + outfile)
             os.remove(path_to_folder + infile)
         elif infile[-3:] == "jpg" or infile[-3:] == "jpeg":
-            try:
-                shutil.copy(path_to_folder + infile, save_path + infile)
-                os.remove(path_to_folder + infile)
-            except:
-                pass
+            shutil.copy(path_to_folder + infile, save_path + infile)
+            os.remove(path_to_folder + infile)
         else:
             pass
 
@@ -53,7 +29,7 @@ def resizeAllJpg(path_to_folder='Data/', newhight=1080, newwid=1080):
       cv2.imwrite(name_without_extension + ".jpg", resized)
 
 
-def convertVideoToImage(path_to_folder='Video/'):
+def convertVideoToImage(path_to_folder='Video/', frame_rate=1):
     for fi in os.listdir(path_to_folder):
         nam, ext = os.path.splitext(fi)
         if fi.endswith('.mp4'):
@@ -72,7 +48,9 @@ def convertVideoToImage(path_to_folder='Video/'):
                     ret,frame = cam.read()
                     if ret:
                         name = out + nam + '/' + '_frame_' + str(currentframe) + '.jpg'
-                        cv2.imwrite(name, frame)
+                        if currentframe % frame_rate == 0:
+                            cv2.imwrite(name, frame)
+                        # cv2.imwrite(name, frame)
                         currentframe += 1
                         pbar.update(1)
                     else:
