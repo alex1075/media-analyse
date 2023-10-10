@@ -61,3 +61,19 @@ def choose_meta(path):
                         ),]
     answer = inquirer.prompt(question)
     return answer['image']   
+
+def choose_framerate():
+    array = [24, 25, 30, 60, 120, 'Non standard']
+    question = [inquirer.List('FPS',
+                            message="What is the framerate of the recording device?",
+                            choices=array,
+                        ),]
+    answer = inquirer.prompt(question)
+    if answer['FPS'] == 'Non standard':
+        question = [inquirer.Text('FPS',
+                            message="What is the framerate of the recording device?",
+                        ),]
+        answer = inquirer.prompt(question)
+        return answer['FPS']
+    else:    
+        return answer['FPS']

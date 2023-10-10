@@ -10,12 +10,8 @@ from code.helper.fancy import *
 from code.helper.threading import *
 from code.helper.exif_data import *
 
-
-
-
-
 def main():
-    path = 'test_folder' # debug only
+    path = 'test_folder/' # debug only
     # path = '/media' # production
     # display_banner()
     # selection_program()
@@ -33,13 +29,14 @@ def main():
         clear()
         # data_processing_banner()
         print('Converting multimedia data to JPEG images')
+        fps = choose_framerate()
         path = check_full_path(path)
         for file in os.listdir(path):
                 # print(file)
                 if file.endswith('.mp4') or file.endswith('.MP4'):
                     # print(file)
                     print('Converting video to image series (saved to subfolder)')
-                    convertVideoToImage(path)
+                    convertAVideoToImage(file, path, fps)
                     print('Video converted')
                     Exif_origin = choose_meta(path)
                     print('Copying metadata')
@@ -65,7 +62,6 @@ def main():
         print('Invalid selection')
         time.sleep(2)
         main()
-
 
 if __name__ == '__main__':
     os.system('export TERM=xterm-256color')

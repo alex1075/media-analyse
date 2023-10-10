@@ -8,14 +8,14 @@ import tqdm
 
 
 def convert(path_to_folder='Data/', save_path='jpegs/'):
-    save_path = check_full_path(save_path)
+    # save_path = check_full_path(save_path)
     for infile in tqdm.tqdm(os.listdir(path_to_folder), desc='Converting images', unit='images'):
         if infile[-3:] == "bmp" or infile[-3:] == "BMP" or infile[-3:] == "tif" or infile[-3:] == "TIF" or infile[-3:] == "raw" or infile[-3:] == "RAW" or infile[-3:] == "dng" or infile[-3:] == "DNG" or infile[-4:] == "tiff" or infile[-4:] == "TIFF" or infile[-3:] == 'ARW' or infile[-3:] == 'arw':
             outfile = infile[:-3] + "jpg"
-            os.system('iconvert' + ' ' + path_to_folder + infile + ' ' + save_path + outfile)
+            os.system('iconvert' + ' ' + str(path_to_folder) + str(infile) + ' ' + str(save_path) + str(outfile))
             os.remove(path_to_folder + infile)
         elif infile[-3:] == "jpg" or infile[-3:] == "jpeg":
-            shutil.copy(path_to_folder + infile, save_path + infile)
+            shutil.copy(str(path_to_folder) + str(infile), str(save_path) + str(infile))
             os.remove(path_to_folder + infile)
         else:
             pass
@@ -48,8 +48,9 @@ def convertVideoToImage(path_to_folder='Video/', frame_rate=1):
                 while(True):
                     ret,frame = cam.read()
                     if ret:
-                        name = out + nam + '/' + '_frame_' + str(currentframe) + '.jpg'
+                        name = out + nam + '' + 'frame_' + str(currentframe) + '.jpg'
                         if currentframe % frame_rate == 0:
+                            print('Saving frame: ' + name)
                             cv2.imwrite(name, frame)
                         # cv2.imwrite(name, frame)
                         currentframe += 1
@@ -79,9 +80,9 @@ def convertAVideoToImage(video, path, frame_rate=1):
                     ret,frame = cam.read()
                     if ret:
                         ni = video.split('/')
-                        out = video[:-4] + '/' + ni[-1] + '_frame_' + str(currentframe) + '.jpg'
-                        if currentframe % frame_rate == 0:
-                            cv2.imwrite(out, frame)
+                        out = video[:-4] + '/' + 'frame_' + str(currentframe) + '.jpg'
+                        if currentframe % int(frame_rate) == 0:
+                            cv2.imwrite(path + out, frame)
                         currentframe += 1
                         pbar.update(1)
                     else:
